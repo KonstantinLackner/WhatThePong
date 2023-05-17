@@ -26,8 +26,8 @@ public class BallController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Shake screen on collision
-        if (screenShake != null)
+        // Shake screen on collision with player
+        if (screenShake != null & collision.gameObject.CompareTag("Player"))
         {
             float impactIntensity = collision.relativeVelocity.magnitude;
             screenShake.Shake(impactIntensity);
