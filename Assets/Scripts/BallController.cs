@@ -11,11 +11,12 @@ public class BallController : MonoBehaviour
     public Transform SpeedTransform;
 
     private Rigidbody2D rb;
-
+    private ScreenShake screenShake;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        screenShake = Camera.main.GetComponent<ScreenShake>();
     }
 
     private void Update()
@@ -25,8 +26,12 @@ public class BallController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Emit collision particles on impact
-        //collisionParticles.Play();
+        // Shake screen on collision
+        if (screenShake != null)
+        {
+            float impactIntensity = collision.relativeVelocity.magnitude;
+            screenShake.Shake(impactIntensity);
+        }
     }
 }
 
