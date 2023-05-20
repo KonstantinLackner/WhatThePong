@@ -44,7 +44,6 @@ public class ScreenShake : MonoBehaviour
         // Start the screen shake effect by setting the shake timer to the shake duration
         intensityMultiplier = Remap(impactIntensity, 0f, 10f, 0.5f, 2f);
         shakeTimer = shakeDuration * intensityMultiplier;
-        Debug.Log("intensity: " + intensityMultiplier);
     }
 
     private float Remap(float value, float fromMin, float fromMax, float toMin, float toMax)

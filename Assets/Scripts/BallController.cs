@@ -1,21 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-using UnityEngine;
-
 public class BallController : MonoBehaviour
 {
-    public ParticleSystem collisionParticles; // Particle system for collision particles
+    public GameObject spawnPoint;
+    private Rigidbody2D _rb;
 
-    public Transform SpeedTransform;
-
-    private Rigidbody2D rb;
+    private void Awake()
+    {
+        _rb = GetComponent<Rigidbody2D>();
+    }
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        ResetPosition();
     }
 
     private void Update()
@@ -23,10 +24,16 @@ public class BallController : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void ResetPosition()
     {
-        // Shake screen on collision with player
-        
+        gameObject.transform.position = spawnPoint.transform.position;
+        _rb.velocity = Vector2.zero;
+        _rb.angularVelocity = 0;
+    }
+
+    public void ResetPositionWithDelay(float seconds)
+    {
+        Invoke(nameof(ResetPosition), seconds);
     }
 }
 
