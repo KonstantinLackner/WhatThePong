@@ -1,31 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 5f;
     private Rigidbody2D rb;
     private Vector2 movement;
+    public InputAction moveInput;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        moveInput.Enable();
     }
 
     void Update()
     {
-        // Input handling for movement
-        float moveHorizontal = Input.GetAxisRaw("Horizontal");
-        float moveVertical = Input.GetAxisRaw("Vertical");
-
-        // Normalize the movement vector to avoid faster diagonal movement
-        movement = new Vector2(moveHorizontal, moveVertical).normalized;
+        movement = moveInput.ReadValue<Vector2>();
     }
 
     void FixedUpdate()
     {
         // Move the player using physics in FixedUpdate
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+    }
+
+    public void Move(InputAction.CallbackContext context){
+        //movement = context.ReadValue<Vector2>();
     }
 }
