@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,28 +10,38 @@ public class BalanceBoard : MonoBehaviour
     private static Vector2 ru = new Vector2(1,1);
     private static Vector2 rl = new Vector2(1,-1);
 
-    private static float acceleration = 5.0f;
+    public float acceleration = 5.0f;
 
-    public InputAction leftUpper;
-    public InputAction leftLower;
-    public InputAction rightUpper;
-    public InputAction rightLower;
+    public InputAction moveInput;
+    public InputAction amplifierInput;
+
+    private bool isAmplified;
+
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        leftUpper.Enable();
-        leftLower.Enable();
-        rightUpper.Enable();
-        rightLower.Enable();
+        moveInput.Enable();
+        amplifierInput.Enable();
+        amplifierInput.performed += ctx => isAmplified = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        var forceVector = InterpretInput(leftUpper.ReadValue<float>(), rightUpper.ReadValue<float>(), leftLower.ReadValue<float>(), rightLower.ReadValue<float>());
-        rb.AddForce(acceleration * forceVector);
+        // var forceVector = InterpretInput(leftUpper.ReadValue<float>(), rightUpper.ReadValue<float>(), leftLower.ReadValue<float>(), rightLower.ReadValue<float>());
+        
+    }
+    void FixedUpdate(){
+        Vector2 movement = moveInput.ReadValue<Vector2>();
+        if(isAmplified){
+            rb.AddForce(acceleration * 2 * movement.normalized);
+        }
+        else {
+            rb.AddForce(acceleration * movement.normalized);
+        }
+        isAmplified =  false;
     }
 
     private Vector2 InterpretInput(float leftUpper, float rightUpper, float leftLower, float rightLower)
